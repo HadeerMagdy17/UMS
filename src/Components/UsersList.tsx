@@ -1,9 +1,110 @@
-import React from 'react'
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+import Modal from 'react-bootstrap/Modal';
+import { Button } from "react-bootstrap";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function UsersList() {
+  //modal
+  const [show, setShow] = useState(false);
+  const [userId, setUserId] = useState(null);
+  const[userData,setUserData]=useState({})
+
+  const handleClose = () => setShow(false);
+  const handleShow = (user) =>{
+    setShow(true);
+    setUserId(user.id)
+    setUserData(user)
+  } 
+   //modal
+  let [users, setUsers] = useState([]);
+ 
+
+  let getUsers = async () => {
+    try {
+      let response = await axios.get("https://dummyjson.com/users");
+      setUsers(response?.data?.users);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  let deleteUser=async()=>{
+   try {
+    let response=await axios.delete(`https://dummyjson.com/users/${userId}`)
+    console.log(response)
+    toast.success("deleted success!")
+    handleClose()
+   } catch (error) {
+    console.log(error)
+    toast.error("something wrong happened!")
+   }
+
+  }
+
+  useEffect(() => {
+    getUsers();
+  }, []);
   return (
+    <>
+    <ToastContainer/>
     <div>
-      userslist
+      <div className="d-flex justify-content-between m-3">
+        <h3>Users List</h3>
+        <button className="btn btn-warning text-white">Add New User</button>
+      </div>
+      <hr />
+      <div>
+      <table className="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col"></th>
+      <th scope="col">First Name</th>
+      <th scope="col">Last Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Phone</th>
+      <th scope="col">BirthDate</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+  {users.map((user,index)=>(
+      <tr key={index}>
+        <th scope="col">{user.id}</th>
+        <th scope="col"><img src={user.image} className="w-25"/></th>
+      <th scope="row">{user.firstName}</th>
+      <td>{user.lastName}</td>
+      <td>{user.email}</td>
+      <td>{user.phone}</td>
+      <td>{user.birthDate}</td>
+      <td><FaEdit className="text-warning mx-2" size={25} />
+      <MdDelete  onClick={()=>handleShow(user)} className="text-warning" size={25}/>
+      </td>
+    </tr>
+  ))}
+
+  </tbody>
+</table>
+<Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm delete???</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you need to delete {userData.firstName} {userData.lastName}!</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            No
+          </Button>
+          <Button variant="danger" onClick={()=>deleteUser()}>
+            Yes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      </div>
     </div>
-  )
+    </>
+  );
 }

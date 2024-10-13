@@ -6,11 +6,11 @@ import { Outlet } from 'react-router-dom'
 export default function MasterLayout() {
   return (
    
-      <div className="row">
-        <div className="col-md-3">
+      <div className="d-flex">
+        <div>
           <SideBar/>
         </div>
-        <div className="col-md-9">
+        <div className="w-100">
           <NavBar/>
           <Outlet/>
         </div>

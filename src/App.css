@@ -10,6 +10,7 @@
     background-color: #f8d442;
     margin-right: 10px;
   }
+  .sidebarContainer{background-color: bisque;}
   .sidebarContainer .ps-sidebar-container .ps-menu-button:hover {
     background-color: rgba(239, 155, 40, 0.3);
   }
