@@ -172,8 +172,8 @@ export default function UserData() {
 
   const onSubmit: SubmitHandler<UserFormData> = async (data) => {
     try {
-      const response = await axios.post("https://dummyjson.com/users/add", data);
-      // console.log(response.data.Message);
+       await axios.post("https://dummyjson.com/users/add", data);
+      
       toast.success("Yeah! User added successfully!");
       navigate("/dashboard/users-list");
     } catch (error) {
