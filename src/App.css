@@ -1,3 +1,9 @@
+html,
+body,
+.modal-content {
+  font-family: "Montserrat", sans-serif !important;
+}
+
 .login-container {
     background: linear-gradient(to right, rgba(254, 175, 0, .9), rgba(254, 175, 0, .6)
     );

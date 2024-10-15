@@ -1,18 +1,27 @@
-import React, { useState } from "react";
+import { useContext, useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import { FaArrowCircleLeft, FaArrowCircleRight, FaHome, FaUserShield } from "react-icons/fa";
 import { FaUsersLine } from "react-icons/fa6";
 import { MdLogout } from "react-icons/md";
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Link } from "react-router-dom";
-import profile from "../../assets/images/profile.png";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../Context/AuthContext";
+
 
 export default function SideBar() {
+  let navigate=useNavigate()
+  let{ userData}:any=useContext(AuthContext)
   let [isCollapsed, setIsCollapsed] = useState(false);
 
   let toggleCollapse=()=>{
 
     setIsCollapsed(! isCollapsed)
+  }
+
+  let logout=()=>{
+    localStorage.removeItem("userToken")
+    navigate("/login")
+
   }
 
   return (
@@ -26,8 +35,8 @@ export default function SideBar() {
             }
             
           </div>
-          <img src={profile} className="w-50 rounded-circle" />
-          <h6 className="my-2">Adam Mohamed</h6>
+          <img src={userData?.image} className="w-50 rounded-circle" />
+          <h6 className="my-2">{userData?.firstName} {userData?.lastName}</h6>
           <h6 className="text-warning">Admin</h6>
         </div>
 
@@ -55,7 +64,7 @@ export default function SideBar() {
             {" "}
             Profile
           </MenuItem>
-          <MenuItem icon={<MdLogout />} component={<Link to="" />}>
+          <MenuItem onClick={logout} icon={<MdLogout />} component={<Link to="" />}>
             {" "}
             Logout
           </MenuItem>
